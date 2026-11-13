@@ -48,6 +48,9 @@ export const bibleData: BibleBook[] = [
         { verse: 2, text: 'I am the LORD thy God, which have brought thee out of the land of Egypt, out of the house of bondage.' },
         { verse: 3, text: 'Thou shalt have no other gods before me.' },
       ]},
+      { chapter: 14, verses: [
+        { verse: 14, text: 'The LORD shall fight for you, and ye shall hold your peace.' },
+      ]},
     ],
   },
   {
@@ -77,6 +80,26 @@ export const bibleData: BibleBook[] = [
         { verse: 1, text: 'He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty.' },
         { verse: 2, text: 'I will say of the LORD, He is my refuge and my fortress: my God; in him will I trust.' },
       ]},
+      { chapter: 27, verses: [
+        { verse: 1, text: 'The LORD is my light and my salvation; whom shall I fear? the LORD is the strength of my life; of whom shall I be afraid?' },
+        { verse: 14, text: 'Wait on the LORD: be of good courage, and he shall strengthen thine heart: wait, I say, on the LORD.' },
+      ]},
+      { chapter: 51, verses: [
+        { verse: 10, text: 'Create in me a clean heart, O God; and renew a right spirit within me.' },
+        { verse: 12, text: 'Restore unto me the joy of thy salvation; and uphold me with thy free spirit.' },
+      ]},
+      { chapter: 119, verses: [
+        { verse: 105, text: 'Thy word is a lamp unto my feet, and a light unto my path.' },
+        { verse: 11, text: 'Thy word have I hid in mine heart, that I might not sin against thee.' },
+      ]},
+      { chapter: 37, verses: [
+        { verse: 4, text: 'Delight thyself also in the LORD: and he shall give thee the desires of thine heart.' },
+        { verse: 5, text: 'Commit thy way unto the LORD; trust also in him; and he shall bring it to pass.' },
+      ]},
+      { chapter: 121, verses: [
+        { verse: 1, text: 'I will lift up mine eyes unto the hills, from whence cometh my help.' },
+        { verse: 2, text: 'My help cometh from the LORD, which made heaven and earth.' },
+      ]},
     ],
   },
   {
@@ -87,6 +110,16 @@ export const bibleData: BibleBook[] = [
       { chapter: 3, verses: [
         { verse: 5, text: 'Trust in the LORD with all thine heart; and lean not unto thine own understanding.' },
         { verse: 6, text: 'In all thy ways acknowledge him, and he shall direct thy paths.' },
+      ]},
+      { chapter: 16, verses: [
+        { verse: 3, text: 'Commit thy works unto the LORD, and thy thoughts shall be established.' },
+        { verse: 9, text: 'A man heart deviseth his way: but the LORD directeth his steps.' },
+      ]},
+      { chapter: 18, verses: [
+        { verse: 10, text: 'The name of the LORD is a strong tower: the righteous runneth into it, and is safe.' },
+      ]},
+      { chapter: 22, verses: [
+        { verse: 6, text: 'Train up a child in the way he should go: and when he is old, he will not depart from it.' },
       ]},
     ],
   },
@@ -100,6 +133,13 @@ export const bibleData: BibleBook[] = [
       ]},
       { chapter: 53, verses: [
         { verse: 5, text: 'But he was wounded for our transgressions, he was bruised for our iniquities: the chastisement of our peace was upon him; and with his stripes we are healed.' },
+      ]},
+      { chapter: 40, verses: [
+        { verse: 31, text: 'But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint.' },
+      ]},
+      { chapter: 55, verses: [
+        { verse: 8, text: 'For my thoughts are not your thoughts, neither are your ways my ways, saith the LORD.' },
+        { verse: 11, text: 'So shall my word be that goeth forth out of my mouth: it shall not return unto me void, but it shall accomplish that which I please, and it shall prosper in the thing whereto I sent it.' },
       ]},
     ],
   },
@@ -138,6 +178,10 @@ export const bibleData: BibleBook[] = [
         { verse: 19, text: 'Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost:' },
         { verse: 20, text: 'Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen.' },
       ]},
+      { chapter: 11, verses: [
+        { verse: 28, text: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.' },
+        { verse: 29, text: 'Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.' },
+      ]},
     ],
   },
   {
@@ -170,6 +214,14 @@ export const bibleData: BibleBook[] = [
         { verse: 7, text: 'If ye abide in me, and my words abide in you, ye shall ask what ye will, and it shall be done unto you.' },
         { verse: 13, text: 'Greater love hath no man than this, that a man lay down his life for his friends.' },
       ]},
+      { chapter: 8, verses: [
+        { verse: 32, text: 'And ye shall know the truth, and the truth shall make you free.' },
+        { verse: 36, text: 'If the Son therefore shall make you free, ye shall be free indeed.' },
+      ]},
+      { chapter: 11, verses: [
+        { verse: 25, text: 'Jesus said unto her, I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live:' },
+        { verse: 35, text: 'Jesus wept.' },
+      ]},
     ],
   },
   {
@@ -192,6 +244,13 @@ export const bibleData: BibleBook[] = [
         { verse: 1, text: 'I beseech you therefore, brethren, by the mercies of God, that ye present your bodies a living sacrifice, holy, acceptable unto God, which is your reasonable service.' },
         { verse: 2, text: 'And be not conformed to this world: but be ye transformed by the renewing of your mind, that ye may prove what is that good, and acceptable, and perfect, will of God.' },
       ]},
+      { chapter: 5, verses: [
+        { verse: 8, text: 'But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us.' },
+      ]},
+      { chapter: 10, verses: [
+        { verse: 9, text: 'That if thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be saved.' },
+        { verse: 17, text: 'So then faith cometh by hearing, and hearing by the word of God.' },
+      ]},
     ],
   },
   {
@@ -208,6 +267,9 @@ export const bibleData: BibleBook[] = [
         { verse: 8, text: 'Charity never faileth: but whether there be prophecies, they shall fail; whether there be tongues, they shall cease; whether there be knowledge, it shall vanish away.' },
         { verse: 13, text: 'And now abideth faith, hope, charity, these three; but the greatest of these is charity.' },
       ]},
+      { chapter: 15, verses: [
+        { verse: 58, text: 'Therefore, my beloved brethren, be ye stedfast, unmoveable, always abounding in the work of the Lord, forasmuch as ye know that your labour is not in vain in the Lord.' },
+      ]},
     ],
   },
   {
@@ -220,6 +282,10 @@ export const bibleData: BibleBook[] = [
       ]},
       { chapter: 12, verses: [
         { verse: 9, text: 'And he said unto me, My grace is sufficient for thee: for my strength is made perfect in weakness. Most gladly therefore will I rather glory in my infirmities, that the power of Christ may rest upon me.' },
+      ]},
+      { chapter: 4, verses: [
+        { verse: 8, text: 'We are troubled on every side, yet not distressed; we are perplexed, but not in despair;' },
+        { verse: 18, text: 'While we look not at the things which are seen, but at the things which are not seen: for the things which are seen are temporal; but the things which are not seen are eternal.' },
       ]},
     ],
   },
@@ -306,6 +372,204 @@ export const bibleData: BibleBook[] = [
       ]},
       { chapter: 21, verses: [
         { verse: 4, text: 'And God shall wipe away all tears from their eyes; and there shall be no more death, neither sorrow, nor crying, neither shall there be any more pain: for the former things are passed away.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Joshua',
+    abbrev: 'Josh',
+    testament: 'OT',
+    chapters: [
+      { chapter: 1, verses: [
+        { verse: 8, text: 'This book of the law shall not depart out of thy mouth; but thou shalt meditate therein day and night, that thou mayest observe to do according to all that is written therein: for then thou shalt make thy way prosperous, and then thou shalt have good success.' },
+        { verse: 9, text: 'Have not I commanded thee? Be strong and of a good courage; be not afraid, neither be thou dismayed: for the LORD thy God is with thee whithersoever thou goest.' },
+      ]},
+    ],
+  },
+  {
+    name: '1 Samuel',
+    abbrev: '1Sam',
+    testament: 'OT',
+    chapters: [
+      { chapter: 16, verses: [
+        { verse: 7, text: 'But the LORD said unto Samuel, Look not on his countenance, or on the height of his stature; because I have refused him: for the LORD seeth not as man seeth; for man looketh on the outward appearance, but the LORD looketh on the heart.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Nehemiah',
+    abbrev: 'Neh',
+    testament: 'OT',
+    chapters: [
+      { chapter: 8, verses: [
+        { verse: 10, text: 'Then he said unto them, Go your way, eat the fat, and drink the sweet, and send portions unto them for whom nothing is prepared: for this day is holy unto our LORD: neither be ye sorry; for the joy of the LORD is your strength.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Job',
+    abbrev: 'Job',
+    testament: 'OT',
+    chapters: [
+      { chapter: 19, verses: [
+        { verse: 25, text: 'For I know that my redeemer liveth, and that he shall stand at the latter day upon the earth:' },
+      ]},
+      { chapter: 23, verses: [
+        { verse: 10, text: 'But he knoweth the way that I take: when he hath tried me, I shall come forth as gold.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Song of Solomon',
+    abbrev: 'Song',
+    testament: 'OT',
+    chapters: [
+      { chapter: 2, verses: [
+        { verse: 4, text: 'He brought me to the banqueting house, and his banner over me was love.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Jeremiah',
+    abbrev: 'Jer',
+    testament: 'OT',
+    chapters: [
+      { chapter: 29, verses: [
+        { verse: 11, text: 'For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.' },
+      ]},
+      { chapter: 33, verses: [
+        { verse: 3, text: 'Call unto me, and I will answer thee, and shew thee great and mighty things, which thou knowest not.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Daniel',
+    abbrev: 'Dan',
+    testament: 'OT',
+    chapters: [
+      { chapter: 3, verses: [
+        { verse: 17, text: 'If it be so, our God whom we serve is able to deliver us from the burning fiery furnace, and he will deliver us out of thine hand, O king.' },
+      ]},
+      { chapter: 6, verses: [
+        { verse: 22, text: 'My God hath sent his angel, and hath shut the lions mouths, that they have not hurt me: forasmuch as before him innocency was found in me; and also before thee, O king, have I done no hurt.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Joel',
+    abbrev: 'Joel',
+    testament: 'OT',
+    chapters: [
+      { chapter: 2, verses: [
+        { verse: 28, text: 'And it shall come to pass afterward, that I will pour out my spirit upon all flesh; and your sons and your daughters shall prophesy, your old men shall dream dreams, your young men shall see visions:' },
+      ]},
+    ],
+  },
+  {
+    name: 'Micah',
+    abbrev: 'Mic',
+    testament: 'OT',
+    chapters: [
+      { chapter: 6, verses: [
+        { verse: 8, text: 'He hath shewed thee, O man, what is good; and what doth the LORD require of thee, but to do justly, and to love mercy, and to walk humbly with thy God?' },
+      ]},
+    ],
+  },
+  {
+    name: 'Luke',
+    abbrev: 'Luke',
+    testament: 'NT',
+    chapters: [
+      { chapter: 1, verses: [
+        { verse: 37, text: 'For with God nothing shall be impossible.' },
+      ]},
+      { chapter: 2, verses: [
+        { verse: 11, text: 'For unto you is born this day in the city of David a Saviour, which is Christ the Lord.' },
+      ]},
+      { chapter: 6, verses: [
+        { verse: 38, text: 'Give, and it shall be given unto you; good measure, pressed down, and shaken together, and running over, shall men give into your bosom. For with the same measure that ye mete withal it shall be measured to you again.' },
+      ]},
+      { chapter: 15, verses: [
+        { verse: 7, text: 'I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.' },
+      ]},
+      { chapter: 23, verses: [
+        { verse: 34, text: 'Then said Jesus, Father, forgive them; for they know not what they do. And they parted his raiment, and cast lots.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Acts',
+    abbrev: 'Acts',
+    testament: 'NT',
+    chapters: [
+      { chapter: 1, verses: [
+        { verse: 8, text: 'But ye shall receive power, after that the Holy Ghost is come upon you: and ye shall be witnesses unto me both in Jerusalem, and in all Judaea, and in Samaria, and unto the uttermost part of the earth.' },
+      ]},
+      { chapter: 2, verses: [
+        { verse: 38, text: 'Then Peter said unto them, Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins, and ye shall receive the gift of the Holy Ghost.' },
+      ]},
+      { chapter: 16, verses: [
+        { verse: 31, text: 'And they said, Believe on the Lord Jesus Christ, and thou shalt be saved, and thy house.' },
+      ]},
+    ],
+  },
+  {
+    name: 'Colossians',
+    abbrev: 'Col',
+    testament: 'NT',
+    chapters: [
+      { chapter: 3, verses: [
+        { verse: 23, text: 'And whatsoever ye do, do it heartily, as to the Lord, and not unto men;' },
+        { verse: 24, text: 'Knowing that of the Lord ye shall receive the reward of the inheritance: for ye serve the Lord Christ.' },
+      ]},
+    ],
+  },
+  {
+    name: '1 Thessalonians',
+    abbrev: '1Thess',
+    testament: 'NT',
+    chapters: [
+      { chapter: 5, verses: [
+        { verse: 16, text: 'Rejoice evermore.' },
+        { verse: 17, text: 'Pray without ceasing.' },
+        { verse: 18, text: 'In every thing give thanks: for this is the will of God in Christ Jesus concerning you.' },
+      ]},
+    ],
+  },
+  {
+    name: '2 Timothy',
+    abbrev: '2Tim',
+    testament: 'NT',
+    chapters: [
+      { chapter: 1, verses: [
+        { verse: 7, text: 'For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.' },
+      ]},
+      { chapter: 4, verses: [
+        { verse: 7, text: 'I have fought a good fight, I have finished my course, I have kept the faith:' },
+      ]},
+    ],
+  },
+  {
+    name: '1 Peter',
+    abbrev: '1Pet',
+    testament: 'NT',
+    chapters: [
+      { chapter: 5, verses: [
+        { verse: 7, text: 'Casting all your care upon him; for he careth for you.' },
+      ]},
+    ],
+  },
+  {
+    name: '1 John',
+    abbrev: '1John',
+    testament: 'NT',
+    chapters: [
+      { chapter: 1, verses: [
+        { verse: 9, text: 'If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.' },
+      ]},
+      { chapter: 4, verses: [
+        { verse: 8, text: 'He that loveth not knoweth not God; for God is love.' },
+        { verse: 19, text: 'We love him, because he first loved us.' },
       ]},
     ],
   },
