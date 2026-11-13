@@ -9,6 +9,7 @@ import NotesEditor from '@/features/notes/NotesEditor';
 import NoteDetail from '@/features/notes/NoteDetail';
 import BibleReader from '@/features/bible/BibleReader';
 import BibleSearch from '@/features/bible/BibleSearch';
+import BookmarksScreen from '@/features/bible/BookmarksScreen';
 import PdfReader from '@/features/pdf/PdfReader';
 import PreacherMode from '@/features/preacher/PreacherMode';
 import MyNotes from '@/features/library/MyNotes';
@@ -21,6 +22,7 @@ export type Screen =
   | { name: 'myNotes' }
   | { name: 'folderView'; folderId: string }
   | { name: 'bible' }
+  | { name: 'bookmarks' }
   | { name: 'search' }
   | { name: 'library' }
   | { name: 'settings' }
@@ -42,7 +44,7 @@ function AppContent() {
   useEffect(() => {
     if (screen.name === 'home') setTab('home');
     else if (screen.name === 'myNotes' || screen.name === 'folderView') setTab('notes');
-    else if (screen.name === 'bible' || screen.name === 'search') setTab('bible');
+    else if (screen.name === 'bible' || screen.name === 'bookmarks' || screen.name === 'search') setTab('bible');
     else if (screen.name === 'library') setTab('library');
     else if (screen.name === 'settings') setTab('settings');
   }, [screen, setTab]);
@@ -53,7 +55,7 @@ function AppContent() {
       setScreen({ name: 'home' });
     } else if (tab === 'notes' && screen.name !== 'myNotes' && screen.name !== 'folderView' && screen.name !== 'editor' && screen.name !== 'noteDetail' && screen.name !== 'preacher') {
       setScreen({ name: 'myNotes' });
-    } else if (tab === 'bible' && screen.name !== 'bible' && screen.name !== 'search') {
+    } else if (tab === 'bible' && screen.name !== 'bible' && screen.name !== 'bookmarks' && screen.name !== 'search') {
       setScreen({ name: 'bible' });
     } else if (tab === 'library' && screen.name !== 'library' && screen.name !== 'pdfReader') {
       setScreen({ name: 'library' });
@@ -92,6 +94,7 @@ function AppContent() {
       case 'myNotes': return <MyNotes navigate={navigate} />;
       case 'folderView': return <FolderView navigate={navigate} folderId={screen.folderId} />;
       case 'bible': return <BibleReader navigate={navigate} />;
+      case 'bookmarks': return <BookmarksScreen navigate={navigate} />;
       case 'search': return <BibleSearch navigate={navigate} />;
       case 'library': return <LibraryScreen navigate={navigate} />;
       case 'settings': return <Settings navigate={navigate} />;

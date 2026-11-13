@@ -108,9 +108,23 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
         showSearch
         onSearch={() => navigate({ name: 'search' })}
         right={
-          <button onClick={() => setShowTrans(s => !s)} className="flex items-center justify-center gap-1 px-3 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-sm font-medium text-slate2-900 dark:text-white">
-            {translation} <ChevronDown size={14} className={showTrans ? 'rotate-180 transition' : 'transition'} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate({ name: 'bookmarks' })}
+              className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition"
+              aria-label="Saved verses"
+            >
+              <Bookmark size={18} />
+              {bookmarks.length > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-teal-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {bookmarks.length}
+                </span>
+              )}
+            </button>
+            <button onClick={() => setShowTrans(s => !s)} className="flex items-center justify-center gap-1 px-3 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-sm font-medium text-slate2-900 dark:text-white">
+              {translation} <ChevronDown size={14} className={showTrans ? 'rotate-180 transition' : 'transition'} />
+            </button>
+          </div>
         }
       />
 
