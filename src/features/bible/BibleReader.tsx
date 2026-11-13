@@ -230,7 +230,7 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
               );
             })}
             {verses.length === 0 && (
-              <p className="text-slate-400 italic text-center py-8">This chapter is not yet available in the preview Bible. Try John 3, Psalm 23, or Hebrews 11.</p>
+              <p className="text-slate-400 italic text-center py-8">Chapter {chapter} of {book.name} could not be loaded.</p>
             )}
           </div>
         </div>

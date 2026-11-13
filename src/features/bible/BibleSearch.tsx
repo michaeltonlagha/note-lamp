@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useApp } from '@/context/AppContext';
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
@@ -30,10 +30,24 @@ export default function BibleSearch({ navigate }: SearchProps) {
   const { translation, openScripture } = useApp();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [searching, setSearching] = useState(false);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    if (!query.trim()) { setDebouncedQuery(''); setSearching(false); return; }
+    setSearching(true);
+    searchTimer.current = setTimeout(() => {
+      setDebouncedQuery(query);
+      setSearching(false);
+    }, 350);
+    return () => { if (searchTimer.current) clearTimeout(searchTimer.current); };
+  }, [query]);
 
   const results = useMemo<SearchResult[]>(() => {
-    if (!query.trim()) return [];
-    const q = query.toLowerCase();
+    if (!debouncedQuery.trim()) return [];
+    const q = debouncedQuery.toLowerCase();
     const results: SearchResult[] = [];
     for (const book of bibleData) {
       for (const ch of book.chapters) {
@@ -61,12 +75,12 @@ export default function BibleSearch({ navigate }: SearchProps) {
         }
       }
     }
-    return results.slice(0, 50);
-  }, [query, filter]);
+    return results.slice(0, 100);
+  }, [debouncedQuery, filter]);
 
   const highlightMatch = (text: string) => {
-    if (!query.trim()) return text;
-    const q = query.trim();
+    if (!debouncedQuery.trim()) return text;
+    const q = debouncedQuery.trim();
     const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     return text.split(regex).map((part, i) =>
       regex.test(part) ? <mark key={i} className="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-royal dark:text-indigo-300 rounded px-0.5 font-semibold">{part}</mark> : <span key={i}>{part}</span>
@@ -95,8 +109,15 @@ export default function BibleSearch({ navigate }: SearchProps) {
         {/* Results */}
         {query.trim() === '' ? (
           <EmptyState icon={<SearchIcon size={28} />} title="Search the Bible" description="Type a word or phrase like 'Peace' or 'faith' to find matching verses." />
+        ) : searching ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-2 border-indigo-royal border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm text-slate-400">Searching the Bible...</p>
+            </div>
+          </div>
         ) : results.length === 0 ? (
-          <EmptyState icon={<SearchIcon size={28} />} title="No results found" description={`No verses match "${query}" with the ${filter} filter.`} />
+          <EmptyState icon={<SearchIcon size={28} />} title="No results found" description={`No verses match "${debouncedQuery}" with the ${filter} filter.`} />
         ) : (
           <div className="space-y-3">
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{results.length} match{results.length !== 1 ? 'es' : ''}</p>

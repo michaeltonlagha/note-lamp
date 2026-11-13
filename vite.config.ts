@@ -13,4 +13,14 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          bibleData: ['src/data/bibleData.ts'],
+        },
+      },
+    },
+  },
 });
