@@ -14,7 +14,7 @@ import PreacherMode from '@/features/preacher/PreacherMode';
 import MyNotes from '@/features/library/MyNotes';
 import FolderView from '@/features/library/FolderView';
 import Settings from '@/features/settings/Settings';
-import { BookOpen, Library, FolderOpen } from 'lucide-react';
+import { BookOpen, Library, FolderOpen, BookOpenText } from 'lucide-react';
 
 export type Screen =
   | { name: 'home' }
@@ -30,7 +30,7 @@ export type Screen =
   | { name: 'preacher'; noteId: string };
 
 function AppContent() {
-  const { isAuthed, tab, setTab } = useApp();
+  const { isAuthed, authLoading, tab, setTab } = useApp();
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
 
   const navigate = useCallback((s: Screen) => {
@@ -62,6 +62,19 @@ function AppContent() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
+
+  if (authLoading) {
+    return (
+      <div className="fixed inset-0 z-50 bg-midnight-400 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-3xl bg-indigo-royal shadow-indigo animate-pulse flex items-center justify-center">
+            <BookOpenText size={32} className="text-white" />
+          </div>
+          <p className="text-white/60 text-sm">Loading NoteLamp...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthed) {
     return (

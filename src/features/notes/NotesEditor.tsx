@@ -93,7 +93,7 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
     setRedoStack(prev => prev.slice(0, -1));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim()) {
       showToast('Please add a title before saving', 'error');
       return;
@@ -103,13 +103,12 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
     if (existing) {
       updateNote(existing.id, { title, body, category, scriptures: scriptureList, folderId, isSermon, type: isSermon ? 'sermon' : 'note' });
       showToast('Note updated');
+      navigate({ name: 'noteDetail', noteId: existing.id });
     } else {
-      const id = addNote({ title, body, date: today, category, scriptures: scriptureList, folderId, isSermon, type: isSermon ? 'sermon' : 'note' });
+      const id = await addNote({ title, body, date: today, category, scriptures: scriptureList, folderId, isSermon, type: isSermon ? 'sermon' : 'note' });
       showToast('Note saved');
       navigate({ name: 'noteDetail', noteId: id });
-      return;
     }
-    navigate({ name: 'noteDetail', noteId: existing.id });
   };
 
   const renderPreview = (text: string) => {

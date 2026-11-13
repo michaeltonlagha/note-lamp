@@ -1,27 +1,53 @@
 import { useState } from 'react';
 import { useApp } from '@/context/AppContext';
-import { BookOpenText, ArrowRight, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { BookOpenText, ArrowRight, Mail, Lock, Eye, EyeOff, ArrowLeft, UserPlus, LogIn } from 'lucide-react';
 
 const SPLASH_IMG = 'https://images.pexels.com/photos/29756525/pexels-photo-29756525.jpeg?auto=compress&cs=tinysrgb&h=1200';
 
+type Mode = 'splash' | 'signin' | 'signup';
+
 export function SplashScreen() {
-  const { signIn } = useApp();
-  const [mode, setMode] = useState<'splash' | 'signin'>('splash');
+  const { signIn, signUp } = useApp();
+  const [mode, setMode] = useState<Mode>('splash');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.includes('@') || password.length < 4) {
-      setError('Enter a valid email and a password of at least 4 characters.');
+    if (!email.includes('@') || password.length < 6) {
+      setError('Enter a valid email and a password of at least 6 characters.');
       return;
     }
-    signIn(email);
+    setLoading(true);
+    setError('');
+
+    if (mode === 'signup') {
+      const result = await signUp(email, password);
+      if (result.error) {
+        setError(result.error);
+        setLoading(false);
+        return;
+      }
+      // Auto sign-in after signup
+      const signInResult = await signIn(email, password);
+      if (signInResult.error) {
+        setError(signInResult.error);
+        setLoading(false);
+      }
+    } else {
+      const result = await signIn(email, password);
+      if (result.error) {
+        setError(result.error);
+        setLoading(false);
+      }
+    }
   };
 
-  if (mode === 'signin') {
+  if (mode === 'signin' || mode === 'signup') {
+    const isSignUp = mode === 'signup';
     return (
       <div className="fixed inset-0 z-50 bg-midnight-400 flex flex-col">
         <div className="absolute inset-0 bg-gradient-to-b from-midnight-400/80 to-midnight-400">
@@ -38,10 +64,10 @@ export function SplashScreen() {
               </div>
               <div>
                 <h1 className="text-2xl font-extrabold text-white">NoteLamp</h1>
-                <p className="text-xs text-white/60">Welcome back</p>
+                <p className="text-xs text-white/60">{isSignUp ? 'Create your account' : 'Welcome back'}</p>
               </div>
             </div>
-            <form onSubmit={handleSignIn} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/50" />
                 <input
@@ -58,7 +84,7 @@ export function SplashScreen() {
                   type={showPwd ? 'text' : 'password'}
                   value={password}
                   onChange={e => { setPassword(e.target.value); setError(''); }}
-                  placeholder="Password"
+                  placeholder="Password (min 6 characters)"
                   className="w-full bg-white/10 border border-white/20 rounded-xl pl-10 pr-11 py-3.5 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
                 />
                 <button type="button" onClick={() => setShowPwd(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
@@ -66,14 +92,22 @@ export function SplashScreen() {
                 </button>
               </div>
               {error && <p className="text-sm text-coral-400">{error}</p>}
-              <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
-                Sign In <ArrowRight size={18} />
+              <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-60">
+                {loading ? 'Please wait...' : (
+                  <>
+                    {isSignUp ? <><UserPlus size={18} /> Create Account</> : <><LogIn size={18} /> Sign In</>}
+                    <ArrowRight size={18} />
+                  </>
+                )}
               </button>
             </form>
             <p className="text-center text-sm text-white/50 mt-6">
-              New here?{' '}
-              <button onClick={() => signIn('guest@notelamp.app')} className="text-indigo-300 font-semibold hover:text-indigo-200">
-                Create an account
+              {isSignUp ? 'Already have an account? ' : 'New here? '}
+              <button
+                onClick={() => { setMode(isSignUp ? 'signin' : 'signup'); setError(''); }}
+                className="text-indigo-300 font-semibold hover:text-indigo-200"
+              >
+                {isSignUp ? 'Sign In' : 'Create an account'}
               </button>
             </p>
           </div>
@@ -100,7 +134,7 @@ export function SplashScreen() {
         </div>
 
         <div className="space-y-3">
-          <button onClick={() => signIn('guest@notelamp.app')} className="btn-primary w-full flex items-center justify-center gap-2 text-base">
+          <button onClick={() => setMode('signup')} className="btn-primary w-full flex items-center justify-center gap-2 text-base">
             Get Started <ArrowRight size={20} />
           </button>
           <button onClick={() => setMode('signin')} className="w-full text-center text-white/90 font-medium py-2 hover:text-white transition">
