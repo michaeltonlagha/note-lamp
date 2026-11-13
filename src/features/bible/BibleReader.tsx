@@ -17,7 +17,6 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
   const [showChapters, setShowChapters] = useState(false);
   const [showTrans, setShowTrans] = useState(false);
   const [selectedVerses, setSelectedVerses] = useState<Set<number>>(new Set());
-  const [showActions, setShowActions] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const ch = getChapter(book.name, chapter);
@@ -36,7 +35,6 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
 
   useEffect(() => {
     setSelectedVerses(new Set());
-    setShowActions(false);
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, [book, chapter]);
 
@@ -46,7 +44,6 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
       if (next.has(v)) next.delete(v); else next.add(v);
       return next;
     });
-    setShowActions(selectedVerses.size > 0 || true);
   };
 
   const ntBooks = bibleData.filter(b => b.testament === 'NT');
@@ -101,7 +98,7 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
     navigate({ name: 'editor', noteId: null });
   };
 
-  const ntBooks
+  return (
     <div className="min-h-screen pb-24">
       <Header
         title="Bible"
