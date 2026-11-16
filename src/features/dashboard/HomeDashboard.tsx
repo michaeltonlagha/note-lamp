@@ -1,8 +1,8 @@
 import { useApp } from '@/context/AppContext';
-import { Plus, BookOpen, FileUp, Bell, ChevronRight, PenLine, Quote, RefreshCw } from 'lucide-react';
+import { Plus, BookOpen, FileUp, Bell, ChevronRight, PenLine, Quote, RefreshCw, Users } from 'lucide-react';
 import { NoteCard, SermonCard, PdfCard } from '@/components/Cards';
 import { useState, useMemo, useCallback } from 'react';
-import { bibleData, getVerse, type BibleBook } from '@/data/bibleData';
+import { bibleData, type BibleBook } from '@/data/bibleData';
 import type { Screen } from '@/App';
 
 interface HomeProps {
@@ -147,6 +147,27 @@ export default function HomeDashboard({ navigate }: HomeProps) {
               <span className="text-xs font-semibold text-slate2-900 dark:text-white">Library</span>
             </button>
           </div>
+
+          {/* Reading Rooms */}
+          <section>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-bold text-slate2-900 dark:text-white">Reading Rooms</h2>
+              <button onClick={() => navigate({ name: 'roomList' })} className="text-sm text-indigo-royal dark:text-indigo-300 font-medium flex items-center gap-0.5">
+                See All <ChevronRight size={16} />
+              </button>
+            </div>
+            <button onClick={() => navigate({ name: 'roomList' })} className="w-full rounded-2xl bg-gradient-to-br from-teal-500 to-electric-500 p-5 text-white shadow-soft hover:shadow-card active:scale-[0.98] transition text-left">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/15 text-white">
+                  <Users size={24} />
+                </span>
+                <div>
+                  <p className="font-bold text-base">Read Together</p>
+                  <p className="text-xs text-white/90 mt-0.5">Create or join a group reading room</p>
+                </div>
+              </div>
+            </button>
+          </section>
 
           {/* Recent Notes */}
           <section>

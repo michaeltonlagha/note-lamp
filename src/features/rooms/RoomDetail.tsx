@@ -13,7 +13,7 @@ interface RoomDetailProps {
 }
 
 export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
-  const { showToast, userEmail } = useApp();
+  const { showToast } = useApp();
   const [room, setRoom] = useState<ReadingRoom | null>(null);
   const [members, setMembers] = useState<RoomMember[]>([]);
   const [progressList, setProgressList] = useState<RoomProgress[]>([]);

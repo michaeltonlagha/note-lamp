@@ -1,8 +1,9 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
 import Header from '@/components/Header';
-import { Bold, Italic, Underline, Heading, List, ListOrdered, Undo, Redo, Save, Eye, ChevronDown } from 'lucide-react';
+import { Bold, Italic, Underline, Heading, List, ListOrdered, Undo, Redo, Save, Eye, ChevronDown, Share2 } from 'lucide-react';
 import { parseReference, getVerseText } from '@/data/bibleData';
+import ShareNoteModal from '@/features/sharing/ShareNoteModal';
 import type { Screen } from '@/App';
 
 interface EditorProps {
@@ -25,6 +26,7 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
   const [undoStack, setUndoStack] = useState<string[]>([]);
   const [redoStack, setRedoStack] = useState<string[]>([]);
   const [preview, setPreview] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const today = new Date().toISOString().slice(0, 10);
@@ -172,9 +174,16 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
         showBack
         onBack={() => navigate({ name: 'home' })}
         right={
-          <button onClick={() => setPreview(p => !p)} className={`flex items-center justify-center w-9 h-9 rounded-xl transition ${preview ? 'bg-indigo-royal text-white' : 'bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white'}`}>
-            <Eye size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            {noteId && (
+              <button onClick={() => setShowShare(true)} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-indigo-royal dark:text-indigo-300 hover:bg-cloud-100 transition" aria-label="Share">
+                <Share2 size={18} />
+              </button>
+            )}
+            <button onClick={() => setPreview(p => !p)} className={`flex items-center justify-center w-9 h-9 rounded-xl transition ${preview ? 'bg-indigo-royal text-white' : 'bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white'}`}>
+              <Eye size={18} />
+            </button>
+          </div>
         }
       />
 
@@ -296,6 +305,19 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
           <Save size={18} /> Save Note
         </button>
       </div>
+
+      {noteId && (
+        <ShareNoteModal
+          open={showShare}
+          onClose={() => setShowShare(false)}
+          noteId={noteId}
+          noteTitle={title}
+          noteBody={body}
+          noteCategory={category}
+          noteScriptures={detectedRefs.map(r => r.ref)}
+          noteIsSermon={category === 'Sermon'}
+        />
+      )}
     </div>
   );
 }
