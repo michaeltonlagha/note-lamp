@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
 import Header from '@/components/Header';
 import { Bold, Italic, Underline, Heading, List, ListOrdered, Undo, Redo, Save, Eye, ChevronDown } from 'lucide-react';
@@ -28,6 +28,19 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const today = new Date().toISOString().slice(0, 10);
+
+  // Pick up queued verse from Bible reader or bookmarks
+  useEffect(() => {
+    const queued = sessionStorage.getItem('notelamp:insert-verse');
+    if (queued) {
+      sessionStorage.removeItem('notelamp:insert-verse');
+      setBody(prev => {
+        const next = prev ? `${prev}\n\n*${queued}*\n` : `*${queued}*\n`;
+        return next;
+      });
+      showToast('Verse inserted from Bible');
+    }
+  }, []);
 
   // Detect Bible references in the body
   const detectedRefs = useMemo(() => {

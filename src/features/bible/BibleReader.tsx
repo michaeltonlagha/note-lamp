@@ -94,7 +94,10 @@ export default function BibleReader({ navigate }: BibleReaderProps) {
   };
 
   const handleAddToNotes = () => {
-    showToast('Verses added to new note');
+    const text = selectedText();
+    if (text) {
+      sessionStorage.setItem('notelamp:insert-verse', `${selectedRef()} — "${text}"`);
+    }
     navigate({ name: 'editor', noteId: null });
   };
 

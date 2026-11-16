@@ -1,7 +1,7 @@
 import { useApp } from '@/context/AppContext';
 import Header from '@/components/Header';
 import {
-  Moon, Sun, Type, BookOpen, DownloadCloud, RefreshCw, HelpCircle, MessageSquare,
+  Moon, Sun, Type, BookOpen, RefreshCw, HelpCircle, MessageSquare,
   Info, ChevronRight, LogOut, Check,
 } from 'lucide-react';
 import { translations } from '@/data/bibleData';
@@ -93,16 +93,15 @@ export default function Settings({ navigate }: SettingsProps) {
               </div>
               <ChevronRight size={18} className="text-slate-300 dark:text-slate-600" />
             </button>
-            <button className="list-row w-full text-left" onClick={() => showToast('Offline Bible download started', 'info')}>
-              <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-violet-500/15 text-violet-500">
-                <DownloadCloud size={18} />
+            <div className="list-row">
+              <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-600/20 text-teal-600">
+                <Check size={18} />
               </span>
               <div className="flex-1">
                 <p className="text-sm font-medium text-slate2-900 dark:text-white">Offline Bible</p>
-                <p className="text-xs text-slate-400">Download for offline reading</p>
+                <p className="text-xs text-slate-400">KJV installed — all 66 books available</p>
               </div>
-              <ChevronRight size={18} className="text-slate-300 dark:text-slate-600" />
-            </button>
+            </div>
           </div>
         </section>
 
@@ -241,9 +240,9 @@ export default function Settings({ navigate }: SettingsProps) {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-500 dark:text-slate-400">Notes stored</span>
-            <span className="text-sm text-slate2-900 dark:text-white">Local device</span>
+            <span className="text-sm text-slate2-900 dark:text-white">Cloud (auto-synced)</span>
           </div>
-          <p className="text-xs text-slate-400">Your notes, bookmarks and preferences are saved on this device. Back up regularly to avoid data loss.</p>
+          <p className="text-xs text-slate-400">Your notes, bookmarks and preferences are synced to your account across devices.</p>
         </div>
       </Dialog>
     </div>

@@ -21,8 +21,15 @@ export default function ScriptureToolkit() {
   };
 
   const handleInsert = () => {
+    if (text) {
+      sessionStorage.setItem('notelamp:insert-verse', `${ref} — "${text}"`);
+    }
     closeScripture();
-    showToast('Verse inserted into note');
+    showToast('Verse added to new note');
+    setTab('home');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('notelamp:new-note'));
+    }, 100);
   };
 
   const handleOpenInBible = () => {
@@ -86,7 +93,7 @@ export default function ScriptureToolkit() {
               {text}
             </>
           ) : (
-            <span className="text-slate-400 italic">Verse not available in this preview. It will appear here when the offline Bible pack is installed.</span>
+            <span className="text-slate-400 italic">Unable to load this verse.</span>
           )}
         </p>
       </div>

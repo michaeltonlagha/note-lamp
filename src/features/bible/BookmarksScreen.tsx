@@ -77,7 +77,7 @@ export default function BookmarksScreen({ navigate }: BookmarksProps) {
                           {text}
                         </p>
                       ) : (
-                        <p className="text-sm text-slate-400 italic">Verse text not available in preview Bible.</p>
+                        <p className="text-sm text-slate-400 italic">Unable to load verse text.</p>
                       )}
 
                       <div className="flex items-center gap-1 mt-3">

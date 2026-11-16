@@ -49,6 +49,13 @@ function AppContent() {
     else if (screen.name === 'settings') setTab('settings');
   }, [screen, setTab]);
 
+  // Listen for "insert verse into new note" from ScriptureToolkit
+  useEffect(() => {
+    const handler = () => navigate({ name: 'editor', noteId: null });
+    window.addEventListener('notelamp:new-note', handler);
+    return () => window.removeEventListener('notelamp:new-note', handler);
+  }, [navigate]);
+
   // Handle bottom nav taps
   useEffect(() => {
     if (tab === 'home' && screen.name !== 'home' && screen.name !== 'editor' && screen.name !== 'noteDetail' && screen.name !== 'pdfReader' && screen.name !== 'preacher' && screen.name !== 'search') {
