@@ -15,6 +15,7 @@ import PreacherMode from '@/features/preacher/PreacherMode';
 import MyNotes from '@/features/library/MyNotes';
 import FolderView from '@/features/library/FolderView';
 import Settings from '@/features/settings/Settings';
+import ImportNoteModal from '@/features/sharing/ImportNoteModal';
 import { BookOpen, Library, FolderOpen, BookOpenText } from 'lucide-react';
 
 export type Screen =
@@ -34,6 +35,7 @@ export type Screen =
 function AppContent() {
   const { isAuthed, authLoading, tab, setTab } = useApp();
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
+  const [pendingShareCode, setPendingShareCode] = useState<string | null>(null);
 
   const navigate = useCallback((s: Screen) => {
     setScreen(s);
@@ -55,6 +57,16 @@ function AppContent() {
     window.addEventListener('notelamp:new-note', handler);
     return () => window.removeEventListener('notelamp:new-note', handler);
   }, [navigate]);
+
+  // Check for ?share=CODE in URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const shareCode = params.get('share');
+    if (shareCode) {
+      window.history.replaceState({}, '', window.location.pathname);
+      setPendingShareCode(shareCode.toUpperCase());
+    }
+  }, []);
 
   // Handle bottom nav taps
   useEffect(() => {
@@ -127,6 +139,11 @@ function AppContent() {
         {/* Scripture toolkit is globally available */}
         <ScriptureToolkit />
         <ToastHost />
+        <ImportNoteModal
+          open={pendingShareCode !== null}
+          onClose={() => setPendingShareCode(null)}
+          initialCode={pendingShareCode ?? ''}
+        />
       </div>
     </div>
   );

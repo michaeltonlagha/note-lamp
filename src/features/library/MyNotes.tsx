@@ -5,7 +5,8 @@ import SearchBar from '@/components/SearchBar';
 import EmptyState from '@/components/EmptyState';
 import Dialog from '@/components/Dialog';
 import { NoteCard, PdfCard } from '@/components/Cards';
-import { FolderPlus, ChevronRight, MoreVertical, Plus, FolderPlus as FolderIcon, FileText, PenLine, BookOpen } from 'lucide-react';
+import { FolderPlus, ChevronRight, MoreVertical, Plus, FolderPlus as FolderIcon, FileText, PenLine, BookOpen, Download } from 'lucide-react';
+import ImportNoteModal from '@/features/sharing/ImportNoteModal';
 import type { Screen } from '@/App';
 
 interface MyNotesProps {
@@ -24,6 +25,7 @@ export default function MyNotes({ navigate }: MyNotesProps) {
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameText, setRenameText] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
 
   const tabs: { key: TabType; label: string; count: number }[] = [
     { key: 'notes', label: 'Notes', count: notes.filter(n => !n.isSermon).length },
@@ -72,9 +74,14 @@ export default function MyNotes({ navigate }: MyNotesProps) {
   return (
     <div className="min-h-screen pb-24">
       <Header title="My Notes" showSearch onSearch={() => {}} right={
-        <button onClick={() => setShowNewFolder(true)} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition">
-          <FolderPlus size={18} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setShowImport(true)} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-indigo-royal dark:text-indigo-300 hover:bg-cloud-100 transition" aria-label="Import shared note">
+            <Download size={18} />
+          </button>
+          <button onClick={() => setShowNewFolder(true)} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition">
+            <FolderPlus size={18} />
+          </button>
+        </div>
       } />
 
       <div className="mx-auto max-w-md px-4 pt-4 space-y-4">
@@ -225,6 +232,8 @@ export default function MyNotes({ navigate }: MyNotesProps) {
       >
         <p className="text-sm text-slate-500 dark:text-slate-400">Notes in this folder will be moved to Sermons. This cannot be undone.</p>
       </Dialog>
+
+      <ImportNoteModal open={showImport} onClose={() => setShowImport(false)} />
     </div>
   );
 }

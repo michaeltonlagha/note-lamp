@@ -1,10 +1,11 @@
 import { useApp } from '@/context/AppContext';
 import Header from '@/components/Header';
 import { parseReference } from '@/data/bibleData';
-import { Mic, Pencil, Trash2, BookOpen, Calendar, Tag, ChevronRight, Plus } from 'lucide-react';
+import { Mic, Pencil, Trash2, BookOpen, Calendar, Tag, ChevronRight, Plus, Share2 } from 'lucide-react';
 import { useState } from 'react';
 import Dialog from '@/components/Dialog';
 import EmptyState from '@/components/EmptyState';
+import ShareNoteModal from '@/features/sharing/ShareNoteModal';
 import type { Screen } from '@/App';
 
 interface NoteDetailProps {
@@ -17,6 +18,7 @@ export default function NoteDetail({ navigate, noteId }: NoteDetailProps) {
   const note = getNote(noteId);
   const [showDelete, setShowDelete] = useState(false);
   const [showMove, setShowMove] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   if (!note) {
     return (
@@ -74,6 +76,9 @@ export default function NoteDetail({ navigate, noteId }: NoteDetailProps) {
         onBack={() => navigate({ name: 'myNotes' })}
         right={
           <div className="flex items-center gap-2">
+            <button onClick={() => setShowShare(true)} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-indigo-royal dark:text-indigo-300 hover:bg-cloud-100 transition" aria-label="Share">
+              <Share2 size={16} />
+            </button>
             <button onClick={() => navigate({ name: 'editor', noteId })} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition" aria-label="Edit">
               <Pencil size={16} />
             </button>
@@ -181,6 +186,17 @@ export default function NoteDetail({ navigate, noteId }: NoteDetailProps) {
           <button onClick={() => setShowMove(false)} className="btn-ghost flex-1">Close</button>
         </div>
       </Dialog>
+
+      <ShareNoteModal
+        open={showShare}
+        onClose={() => setShowShare(false)}
+        noteId={noteId}
+        noteTitle={note.title}
+        noteBody={note.body}
+        noteCategory={note.category}
+        noteScriptures={note.scriptures}
+        noteIsSermon={note.isSermon}
+      />
     </div>
   );
 }
