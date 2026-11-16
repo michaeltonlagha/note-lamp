@@ -30,8 +30,10 @@ export interface RoomPost {
   id: string;
   room_id: string;
   user_id: string;
-  content: string;
+  content: string | null;
   page_reference: number | null;
+  image_url: string | null;
+  audio_url: string | null;
   created_at: string;
   author_email?: string;
 }
