@@ -265,7 +265,7 @@ export default function NotesEditor({ navigate, noteId }: EditorProps) {
                   <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-indigo-royal/10 text-indigo-royal dark:text-indigo-300">KJV</span>
                 </div>
                 <p className="reading-prose text-sm text-slate2-900 dark:text-white leading-relaxed">
-                  {r.text || <span className="text-slate-400 italic">Verse text will appear here when the full offline Bible is installed.</span>}
+                  {r.text || <span className="text-slate-400 italic">Unable to load verse text.</span>}
                 </p>
                 <div className="flex gap-2 mt-3">
                   <button onClick={() => openScriptureRef(r.ref)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-royal text-white">Open</button>
