@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useApp } from '@/context/AppContext';
 import { supabase } from '@/services/supabase';
 import Header from '@/components/Header';
 import EmptyState from '@/components/EmptyState';
-import { Plus, BookOpen, Users, Loader2, ChevronRight, Trash2 } from 'lucide-react';
+import { Plus, BookOpen, Users, Loader2, ChevronRight } from 'lucide-react';
 import CreateRoomModal from './CreateRoomModal';
 import JoinRoomModal from './JoinRoomModal';
 import type { Screen } from '@/App';
@@ -14,7 +13,6 @@ interface RoomsListProps {
 }
 
 export default function RoomsList({ navigate }: RoomsListProps) {
-  const { showToast, userEmail } = useApp();
   const [rooms, setRooms] = useState<ReadingRoom[]>([]);
   const [progress, setProgress] = useState<Record<string, RoomProgress[]>>({});
   const [loading, setLoading] = useState(true);
@@ -47,12 +45,6 @@ export default function RoomsList({ navigate }: RoomsListProps) {
   }, []);
 
   useEffect(() => { fetchRooms(); }, [fetchRooms]);
-
-  const handleDeleteRoom = async (roomId: string) => {
-    await supabase.from('reading_rooms').delete().eq('id', roomId);
-    showToast('Room deleted');
-    fetchRooms();
-  };
 
   const getMyProgress = (roomId: string): number => {
     const entries = progress[roomId] ?? [];
@@ -113,7 +105,6 @@ export default function RoomsList({ navigate }: RoomsListProps) {
             {rooms.map(room => {
               const avg = getAvgProgress(room.id, room.total_pages);
               const myPage = getMyProgress(room.id);
-              const isCreator = userEmail && room.created_by !== '';
               return (
                 <div key={room.id} className="card p-4 hover:shadow-card transition active:scale-[0.98]">
                   <button onClick={() => navigate({ name: 'roomDetail', roomId: room.id })} className="w-full text-left">

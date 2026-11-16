@@ -16,6 +16,8 @@ import MyNotes from '@/features/library/MyNotes';
 import FolderView from '@/features/library/FolderView';
 import Settings from '@/features/settings/Settings';
 import ImportNoteModal from '@/features/sharing/ImportNoteModal';
+import RoomsList from '@/features/rooms/RoomsList';
+import RoomDetail from '@/features/rooms/RoomDetail';
 import { BookOpen, Library, FolderOpen, BookOpenText } from 'lucide-react';
 
 export type Screen =
@@ -30,7 +32,9 @@ export type Screen =
   | { name: 'editor'; noteId: string | null }
   | { name: 'noteDetail'; noteId: string }
   | { name: 'pdfReader'; pdfId: string }
-  | { name: 'preacher'; noteId: string };
+  | { name: 'preacher'; noteId: string }
+  | { name: 'roomList' }
+  | { name: 'roomDetail'; roomId: string };
 
 function AppContent() {
   const { isAuthed, authLoading, tab, setTab } = useApp();
@@ -120,6 +124,8 @@ function AppContent() {
       case 'editor': return <NotesEditor navigate={navigate} noteId={screen.noteId} />;
       case 'noteDetail': return <NoteDetail navigate={navigate} noteId={screen.noteId} />;
       case 'pdfReader': return <PdfReader navigate={navigate} pdfId={screen.pdfId} />;
+      case 'roomList': return <RoomsList navigate={navigate} />;
+      case 'roomDetail': return <RoomDetail navigate={navigate} roomId={screen.roomId} />;
       default: return <HomeDashboard navigate={navigate} />;
     }
   };
