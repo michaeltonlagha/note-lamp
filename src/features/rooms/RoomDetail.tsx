@@ -13,11 +13,12 @@ interface RoomDetailProps {
 }
 
 export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
-  const { showToast } = useApp();
+  const { showToast, userId, displayName } = useApp();
   const [room, setRoom] = useState<ReadingRoom | null>(null);
   const [members, setMembers] = useState<RoomMember[]>([]);
   const [progressList, setProgressList] = useState<RoomProgress[]>([]);
   const [posts, setPosts] = useState<RoomPost[]>([]);
+  const [memberNames, setMemberNames] = useState<Record<string, string>>({});
   const [myPage, setMyPage] = useState(0);
   const [newPost, setNewPost] = useState('');
   const [postPageRef, setPostPageRef] = useState('');
@@ -52,14 +53,31 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
 
     const r = roomRes.data as unknown as ReadingRoom | null;
     setRoom(r);
-    setMembers((membersRes.data ?? []) as unknown as RoomMember[]);
+    const memberRows = (membersRes.data ?? []) as unknown as RoomMember[];
+    setMembers(memberRows);
     const prog = (progressRes.data ?? []) as unknown as RoomProgress[];
     setProgressList(prog);
     setPosts((postsRes.data ?? []) as unknown as RoomPost[]);
-    const mine = prog.find(p => p.current_page !== undefined);
+    const mine = prog.find(p => p.user_id === userId);
     setMyPage(mine?.current_page ?? 0);
     setLoading(false);
-  }, [roomId]);
+
+    // Load display names for all members + post authors
+    const authorIds = new Set<string>(memberRows.map(m => m.user_id));
+    (postsRes.data ?? []).forEach(p => authorIds.add((p as RoomPost).user_id));
+    const ids = Array.from(authorIds).filter(Boolean);
+    if (ids.length > 0) {
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('id, display_name')
+        .in('id', ids);
+      const names: Record<string, string> = {};
+      (profileData ?? []).forEach((p) => {
+        names[(p as { id: string; display_name: string }).id] = (p as { id: string; display_name: string }).display_name;
+      });
+      setMemberNames(names);
+    }
+  }, [userId]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
@@ -271,12 +289,20 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
   }, []);
 
   const handleLeaveRoom = async () => {
-    const existing = members.find(m => m.user_id !== undefined);
+    const existing = members.find(m => m.user_id === userId);
     if (existing) {
       await supabase.from('reading_room_members').delete().eq('id', existing.id);
     }
     showToast('Left the room');
     navigate({ name: 'roomList' });
+  };
+
+  const nameFor = (uid: string | undefined): string => {
+    if (!uid) return 'Member';
+    if (uid === userId) return 'You';
+    const name = memberNames[uid];
+    if (name) return name;
+    return 'Member';
   };
 
   if (loading) {
@@ -391,17 +417,18 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
         {/* Members tab */}
         {activeTab === 'progress' && (
           <div className="space-y-2">
-            {progressList.map((p, i) => {
+            {progressList.map((p) => {
               const pct = room.total_pages > 0 ? Math.round((p.current_page / room.total_pages) * 100) : 0;
-              const member = members.find(m => m.user_id === p.user_id);
-              const isMe = member?.user_id !== undefined;
+              const isMe = p.user_id === userId;
+              const name = nameFor(p.user_id);
+              const initials = name === 'You' ? 'You' : name.slice(0, 2).toUpperCase();
               return (
-                <div key={p.id || i} className="card p-3 flex items-center gap-3">
-                  <span className="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-royal/15 text-indigo-royal dark:text-indigo-300 font-bold text-sm shrink-0">
-                    {isMe ? 'You' : `M${i + 1}`}
+                <div key={p.id} className="card p-3 flex items-center gap-3">
+                  <span className="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-royal/15 text-indigo-royal dark:text-indigo-300 font-bold text-xs shrink-0 uppercase">
+                    {initials}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate2-900 dark:text-white">{isMe ? 'You' : `Member ${i + 1}`}</p>
+                    <p className="text-sm font-medium text-slate2-900 dark:text-white truncate">{name}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <div className="flex-1 h-1.5 rounded-full bg-cloud-100 dark:bg-midnight-100 overflow-hidden">
                         <div className="h-full rounded-full bg-teal-500" style={{ width: `${pct}%` }} />
@@ -521,20 +548,25 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
               <EmptyState icon={<MessageSquare size={28} />} title="No posts yet" description="Share a thought, screenshot, or voice memo to start the conversation." />
             ) : (
               posts.map(post => {
-                const isMyPost = post.user_id !== undefined;
+                const isMyPost = post.user_id === userId;
+                const authorName = nameFor(post.user_id);
+                const initials = authorName === 'You' ? 'You' : authorName.slice(0, 2).toUpperCase();
                 return (
                   <div key={post.id} className="card p-4 animate-slideUp">
                     <div className="flex items-start gap-3">
-                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 dark:bg-teal-600/20 text-teal-600 text-xs font-bold shrink-0">
-                        {isMyPost ? 'You' : 'M'}
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 dark:bg-teal-600/20 text-teal-600 text-xs font-bold shrink-0 uppercase">
+                        {initials}
                       </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{formatDate(post.created_at)}</span>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="text-xs font-semibold text-slate2-900 dark:text-white truncate">{authorName}</span>
+                            <span className="text-xs text-slate-400 shrink-0">{formatDate(post.created_at)}</span>
+                          </div>
                           {isMyPost && (
                             <button
                               onClick={() => handleDeletePost(post.id, post.image_url, post.audio_url)}
-                              className="text-slate-300 hover:text-coral-500 transition"
+                              className="text-slate-300 hover:text-coral-500 transition shrink-0"
                             >
                               <Trash2 size={13} />
                             </button>

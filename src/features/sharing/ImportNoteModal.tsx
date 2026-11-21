@@ -10,7 +10,7 @@ interface ImportNoteModalProps {
 }
 
 export default function ImportNoteModal({ open, onClose, initialCode }: ImportNoteModalProps) {
-  const { addNote, showToast } = useApp();
+  const { addNote, showToast, folders } = useApp();
   const [code, setCode] = useState(initialCode ?? '');
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<{ title: string; body: string; category: string; scriptures: string[]; is_sermon: boolean } | null>(null);
@@ -64,7 +64,7 @@ export default function ImportNoteModal({ open, onClose, initialCode }: ImportNo
       isSermon: preview.is_sermon,
       type: preview.is_sermon ? 'sermon' : 'note',
       scriptures: preview.scriptures,
-      folderId: 'f1',
+      folderId: folders[0]?.id ?? '',
     });
     setLoading(false);
     showToast('Note imported successfully');

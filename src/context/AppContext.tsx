@@ -35,6 +35,8 @@ interface AppContextValue {
   isAuthed: boolean;
   authLoading: boolean;
   userEmail: string;
+  userId: string;
+  displayName: string;
   signUp: (email: string, password: string) => Promise<AuthResult>;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signOut: () => void;
@@ -149,6 +151,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const isAuthed = !!session;
   const userEmail = session?.user?.email ?? '';
+  const userId = session?.user?.id ?? '';
+  const displayName = userEmail ? userEmail.split('@')[0].replace(/[^a-zA-Z]/g, '') : '';
+
+  // Ensure a profile row exists for the signed-in user
+  useEffect(() => {
+    if (!session) return;
+    (async () => {
+      await supabase.from('profiles').upsert({
+        id: session.user.id,
+        display_name: displayName,
+      }, { onConflict: 'id' });
+    })();
+  }, [session, displayName]);
 
   // Apply theme to document
   useEffect(() => {
@@ -406,7 +421,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const value: AppContextValue = {
     theme, toggleTheme, setTheme, fontSize, setFontSize, translation, setTranslation,
-    isAuthed, authLoading, userEmail, signUp, signIn, signOut,
+    isAuthed, authLoading, userEmail, userId, displayName, signUp, signIn, signOut,
     tab, setTab,
     notes, addNote, updateNote, deleteNote, getNote,
     folders, addFolder, renameFolder, deleteFolder,
