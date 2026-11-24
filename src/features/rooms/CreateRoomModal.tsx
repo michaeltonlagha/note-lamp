@@ -9,6 +9,15 @@ interface CreateRoomModalProps {
   onCreated: () => void;
 }
 
+function generateInviteCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+
 export default function CreateRoomModal({ open, onClose, onCreated }: CreateRoomModalProps) {
   const { showToast } = useApp();
   const [name, setName] = useState('');
@@ -26,6 +35,7 @@ export default function CreateRoomModal({ open, onClose, onCreated }: CreateRoom
     setLoading(true);
 
     const pages = parseInt(totalPages) || 0;
+    const inviteCode = generateInviteCode();
 
     const { data: room, error: roomErr } = await supabase
       .from('reading_rooms')
@@ -35,6 +45,7 @@ export default function CreateRoomModal({ open, onClose, onCreated }: CreateRoom
         book_title: bookTitle.trim(),
         book_author: bookAuthor.trim(),
         total_pages: pages,
+        invite_code: inviteCode,
       })
       .select()
       .single();

@@ -37,6 +37,7 @@ interface AppContextValue {
   userEmail: string;
   userId: string;
   displayName: string;
+  updateDisplayName: (name: string) => Promise<boolean>;
   signUp: (email: string, password: string) => Promise<AuthResult>;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signOut: () => void;
@@ -147,23 +148,38 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [scriptureToolkit, setScriptureToolkit] = useState<ScriptureToolkitState>({ open: false, reference: '' });
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [profileName, setProfileName] = useState('');
   const seededRef = useRef(false);
 
   const isAuthed = !!session;
   const userEmail = session?.user?.email ?? '';
   const userId = session?.user?.id ?? '';
-  const displayName = userEmail ? userEmail.split('@')[0].replace(/[^a-zA-Z]/g, '') : '';
+  const derivedName = userEmail ? userEmail.split('@')[0].replace(/[^a-zA-Z]/g, '') : '';
+  const displayName = profileName || derivedName;
 
   // Ensure a profile row exists for the signed-in user
   useEffect(() => {
-    if (!session) return;
+    if (!session) {
+      setProfileName('');
+      return;
+    }
     (async () => {
-      await supabase.from('profiles').upsert({
-        id: session.user.id,
-        display_name: displayName,
-      }, { onConflict: 'id' });
+      const { data } = await supabase.from('profiles')
+        .select('display_name')
+        .eq('id', session.user.id)
+        .maybeSingle();
+      const existing = (data as { display_name: string } | null)?.display_name ?? '';
+      if (existing) {
+        setProfileName(existing);
+      } else {
+        await supabase.from('profiles').upsert({
+          id: session.user.id,
+          display_name: derivedName,
+        }, { onConflict: 'id' });
+        setProfileName(derivedName);
+      }
     })();
-  }, [session, displayName]);
+  }, [session, derivedName]);
 
   // Apply theme to document
   useEffect(() => {
@@ -313,6 +329,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setTab('home');
   }, []);
 
+  const updateDisplayName = useCallback(async (name: string): Promise<boolean> => {
+    const trimmed = name.trim();
+    if (!session || !trimmed) return false;
+    const { error } = await supabase.from('profiles')
+      .update({ display_name: trimmed })
+      .eq('id', session.user.id);
+    if (error) return false;
+    setProfileName(trimmed);
+    return true;
+  }, [session]);
+
   const addNote = useCallback(async (n: Omit<NoteItem, 'id'>): Promise<string> => {
     if (!session) {
       const tempId = 'n' + Date.now();
@@ -421,7 +448,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const value: AppContextValue = {
     theme, toggleTheme, setTheme, fontSize, setFontSize, translation, setTranslation,
-    isAuthed, authLoading, userEmail, userId, displayName, signUp, signIn, signOut,
+    isAuthed, authLoading, userEmail, userId, displayName, updateDisplayName, signUp, signIn, signOut,
     tab, setTab,
     notes, addNote, updateNote, deleteNote, getNote,
     folders, addFolder, renameFolder, deleteFolder,

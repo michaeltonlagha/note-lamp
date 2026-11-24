@@ -8,6 +8,7 @@ export interface ReadingRoom {
   created_by: string;
   created_at: string;
   is_active: boolean;
+  invite_code: string | null;
 }
 
 export interface RoomMember {

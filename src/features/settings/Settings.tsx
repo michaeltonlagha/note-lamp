@@ -2,7 +2,7 @@ import { useApp } from '@/context/AppContext';
 import Header from '@/components/Header';
 import {
   Moon, Sun, Type, BookOpen, RefreshCw, HelpCircle, MessageSquare,
-  Info, ChevronRight, LogOut, Check,
+  Info, ChevronRight, LogOut, Check, Pencil, Loader2,
 } from 'lucide-react';
 import { translations } from '@/data/bibleData';
 import { useState } from 'react';
@@ -17,15 +17,37 @@ interface SettingsProps {
 export default function Settings({ navigate }: SettingsProps) {
   const {
     theme, toggleTheme, fontSize, setFontSize, translation, setTranslation,
-    userEmail, signOut, showToast, bookmarks,
+    userEmail, signOut, showToast, bookmarks, displayName, updateDisplayName,
   } = useApp();
   const [showVersions, setShowVersions] = useState(false);
   const [showFont, setShowFont] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [showSync, setShowSync] = useState(false);
+  const [showEditName, setShowEditName] = useState(false);
+  const [nameDraft, setNameDraft] = useState('');
+  const [savingName, setSavingName] = useState(false);
 
-  const userName = userEmail ? userEmail.split('@')[0].replace(/[^a-zA-Z]/g, '') : 'Friend';
-  const display = userName.charAt(0).toUpperCase() + userName.slice(1);
+  const display = displayName
+    ? displayName.charAt(0).toUpperCase() + displayName.slice(1)
+    : 'Friend';
+
+  const openNameEditor = () => {
+    setNameDraft(displayName);
+    setShowEditName(true);
+  };
+
+  const handleSaveName = async () => {
+    if (!nameDraft.trim()) return;
+    setSavingName(true);
+    const ok = await updateDisplayName(nameDraft);
+    setSavingName(false);
+    if (ok) {
+      setShowEditName(false);
+      showToast('Name updated');
+    } else {
+      showToast('Could not update name', 'error');
+    }
+  };
 
   return (
     <div className="min-h-screen pb-24">
@@ -41,7 +63,10 @@ export default function Settings({ navigate }: SettingsProps) {
             <h2 className="font-bold text-slate2-900 dark:text-white">{display}</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{userEmail}</p>
           </div>
-          <button onClick={() => signOut()} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition">
+          <button onClick={openNameEditor} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition" aria-label="Edit name">
+            <Pencil size={16} />
+          </button>
+          <button onClick={() => signOut()} className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-slate2-900 dark:text-white hover:bg-cloud-100 transition" aria-label="Sign out">
             <LogOut size={16} />
           </button>
         </div>
@@ -158,6 +183,42 @@ export default function Settings({ navigate }: SettingsProps) {
 
         <p className="text-center text-xs text-slate-400 pb-2">NoteLamp v1.0.0 — Study deeper. Preach clearer.</p>
       </div>
+
+      {/* Edit display name dialog */}
+      <Dialog
+        open={showEditName}
+        onClose={() => setShowEditName(false)}
+        title="Your Name"
+        actions={
+          <div className="flex gap-3">
+            <button onClick={() => setShowEditName(false)} className="btn-ghost flex-1">Cancel</button>
+            <button
+              onClick={handleSaveName}
+              disabled={savingName || !nameDraft.trim()}
+              className="btn-primary flex-1 flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {savingName ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+              Save
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-3">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            This is the name other members see in your reading rooms.
+          </p>
+          <input
+            type="text"
+            value={nameDraft}
+            onChange={e => setNameDraft(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleSaveName(); }}
+            placeholder="Your name"
+            className="input-base"
+            maxLength={30}
+            autoFocus
+          />
+        </div>
+      </Dialog>
 
       {/* Bible version bottom sheet */}
       <BottomSheet open={showVersions} onClose={() => setShowVersions(false)} title="Bible Version">

@@ -3,7 +3,8 @@ import { useApp } from '@/context/AppContext';
 import { supabase } from '@/services/supabase';
 import Header from '@/components/Header';
 import EmptyState from '@/components/EmptyState';
-import { BookOpen, Users, Send, Loader2, Trash2, MessageSquare, Minus, Plus, Image as ImageIcon, Mic, Square, Play, Pause, X } from 'lucide-react';
+import { BookOpen, Users, Send, Loader2, Trash2, MessageSquare, Minus, Plus, Image as ImageIcon, Mic, Square, Play, Pause, X, UserPlus } from 'lucide-react';
+import RoomInviteModal from './RoomInviteModal';
 import type { Screen } from '@/App';
 import type { ReadingRoom, RoomMember, RoomProgress, RoomPost } from './roomTypes';
 
@@ -25,6 +26,7 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'progress' | 'discussion'>('progress');
+  const [showInvite, setShowInvite] = useState(false);
 
   // Media attachment state
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -341,7 +343,20 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
 
   return (
     <div className="min-h-screen pb-24">
-      <Header title={room.name} showBack onBack={() => navigate({ name: 'roomList' })} />
+      <Header
+        title={room.name}
+        showBack
+        onBack={() => navigate({ name: 'roomList' })}
+        right={
+          <button
+            onClick={() => setShowInvite(true)}
+            className="flex items-center justify-center w-9 h-9 rounded-xl bg-cloud-50 dark:bg-midnight-300 text-indigo-royal dark:text-indigo-300 hover:bg-cloud-100 transition"
+            aria-label="Invite friends"
+          >
+            <UserPlus size={18} />
+          </button>
+        }
+      />
 
       <div className="mx-auto max-w-md px-4 pt-4 space-y-4">
         {/* Room info card */}
@@ -623,6 +638,13 @@ export default function RoomDetail({ navigate, roomId }: RoomDetailProps) {
           Leave Room
         </button>
       </div>
+
+      <RoomInviteModal
+        open={showInvite}
+        onClose={() => setShowInvite(false)}
+        roomName={room.name}
+        inviteCode={room.invite_code}
+      />
     </div>
   );
 }
